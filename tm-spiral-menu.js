@@ -23,34 +23,10 @@ class TmSpiralMenu extends PolymerElement {
             
             svg { 
                 flex: 1;
-                /*position: absolute;*/
-                /*top: 200px;*/
-                /*left: 100px;*/
                 box-sizing: border-box;
                 //border: solid red 1px;
             }
             
-            /*#ball {*/
-              /*width: 10px;*/
-              /*height: 10px;*/
-              /*background-color: red;*/
-              /*border-radius: 50%;*/
-              /**/
-              /*offset-path: path('M 10 80 Q 77.5 10, 145 80 T 280 80');*/
-              /*offset-distance: 0%;*/
-            
-              /*//animation: red-ball 2s linear alternate infinite;*/
-              /*animation: red-ball 2s linear forwards;*/
-            /*}*/
-            
-            /*@keyframes red-ball {*/
-              /*from {*/
-                /*offset-distance: 0%;*/
-              /*}*/
-              /*to {*/
-                /*offset-distance: 100%;*/
-              /*}*/
-            /*}*/
             #container {
                 display: inline-block;
                 box-sizing: border-box;
@@ -63,15 +39,6 @@ class TmSpiralMenu extends PolymerElement {
       
     `;
     }
-
-
-    // d3.select('path')
-    //     .transition()
-    //     .attrTween('d', function (d) {
-    //         var previous = d3.select(this).attr('d');
-    //         var current = line(d);
-    //         return d3.interpolatePath(previous, current);
-    //     });
 
     static get properties() {
         return {
@@ -143,9 +110,6 @@ class TmSpiralMenu extends PolymerElement {
 
         let g = svg.append('g').attr("transform", "translate(" + (size/2) + "," + (size/2)  + ")");
 
-        let circle = svg.select('#ball');
-
-
 
         let theta = function(r) {
             return spirals * Math.PI * r;
@@ -167,70 +131,8 @@ class TmSpiralMenu extends PolymerElement {
             .style("fill", "none")
             .style("stroke", "none");
 
-
-        console.log('PATH: ', path);
-
-
-        // let length = path.node().getTotalLength();
-        // let rr = d3.interpolate(0, length);
-        //
-        // function createPathTween(circle, length, r) {
-        //
-        //     return function(t){
-        //         let point = path.node().getPointAtLength(r(t)); // Get the next point along the path
-        //         circle.attr("cx", point.x) // Set the cx
-        //             .attr("cy", point.y) // Set the cy
-        //     }
-        // }
-
-
         let interpolator = d3.interpolate(0, path.node().getTotalLength()); //Set up interpolation from 0 to the path length
-        // let items = [
-        //     {name: 'A', color: 'teal'},
-        //     {name: 'B', color: 'cyan'},
-        //     {name: 'C', color: 'purple'},
-        //     {name: 'A', color: 'orange'},
-        //     {name: 'B', color: 'green'},
-        //     {name: 'C', color: 'blue'},
-        //     {name: 'C', color: 'yellow'},
-        //     {name: 'A', color: 'teal'},
-        //     // {name: 'B', color: 'cyan'},
-        //     // {name: 'C', color: 'purple'},
-        //     // {name: 'A', color: 'orange'},
-        //     // {name: 'B', color: 'green'},
-        //     // {name: 'C', color: 'blue'},
-        //     // {name: 'C', color: 'yellow'},
-        //     // {name: 'A', color: 'teal'},
-        //     // {name: 'B', color: 'cyan'},
-        //     // {name: 'C', color: 'purple'},
-        //     // {name: 'A', color: 'orange'},
-        //     // {name: 'B', color: 'green'},
-        //     // {name: 'C', color: 'blue'},
-        //     // {name: 'C', color: 'yellow'},
-        //     // {name: 'A', color: 'teal'},
-        //     // {name: 'B', color: 'cyan'},
-        //     // {name: 'C', color: 'purple'},
-        //     // {name: 'A', color: 'orange'},
-        //     // {name: 'B', color: 'green'},
-        //     // {name: 'C', color: 'blue'},
-        //     // {name: 'C', color: 'yellow'},
-        //     // {name: 'A', color: 'teal'},
-        //     // {name: 'B', color: 'cyan'},
-        //     // {name: 'C', color: 'purple'},
-        //     // {name: 'A', color: 'orange'},
-        //     // {name: 'B', color: 'green'},
-        //     // {name: 'C', color: 'blue'},
-        //     // {name: 'C', color: 'yellow'},
-        //     // {name: 'A', color: 'teal'},
-        //     // {name: 'B', color: 'cyan'},
-        //     // {name: 'C', color: 'purple'},
-        //     // {name: 'A', color: 'orange'},
-        //     // {name: 'B', color: 'green'},
-        //     // {name: 'C', color: 'blue'},
-        //     // {name: 'C', color: 'yellow'},
-        // ];
 
-        // let items = data;
 
         let spiralLength = path.node().getTotalLength();
         let numberOfItems = items.length;
