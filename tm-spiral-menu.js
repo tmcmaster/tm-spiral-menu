@@ -155,7 +155,7 @@ class TmSpiralMenu extends PolymerElement {
         let numberOfItems = items.length;
 
         let open = 0;
-        let animating = false;
+        this.animating = false;
 
         g.append('circle')
             .attr('cx', 0)
@@ -164,7 +164,7 @@ class TmSpiralMenu extends PolymerElement {
             .attr('fill', "red")
             .on('click', function() {
                 if (animating) return;
-                animating = true;
+                this.animating = true;
 
                 if (open === 0) {
                     g.selectAll('circle.items').transition()
@@ -206,7 +206,7 @@ class TmSpiralMenu extends PolymerElement {
                         });
                 }
                 open = 1 - open;
-                animating = false;
+                this.animating = false;
             });
 
 
