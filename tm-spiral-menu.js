@@ -16,14 +16,18 @@ class TmSpiralMenu extends PolymerElement {
         <style>
             :host {
               display: block;
+              display: flex;
+              flex-direction: row;
+              justify-content: center;
             }
             
             svg { 
-                position: absolute;
-                top: 200px;
-                left: 100px;
+                flex: 1;
+                /*position: absolute;*/
+                /*top: 200px;*/
+                /*left: 100px;*/
                 box-sizing: border-box;
-                border: solid red 1px;
+                //border: solid red 1px;
             }
             
             /*#ball {*/
@@ -47,12 +51,16 @@ class TmSpiralMenu extends PolymerElement {
                 /*offset-distance: 100%;*/
               /*}*/
             /*}*/
-
+            #container {
+                display: inline-block;
+                box-sizing: border-box;
+                border: solid teal 2px;
+            }
         </style>
-        <svg id="svg" height="500" width="500">
-            <g>
-            </g>
-        </svg> 
+        <div id="container">
+        
+        </div>
+      
     `;
     }
 
@@ -67,26 +75,70 @@ class TmSpiralMenu extends PolymerElement {
 
     static get properties() {
         return {
-            prop1: {
-                type: String,
-                value: 'tm-spiral-menu',
+            animating: {
+                type: Number,
+                value: 0,
             },
+            duration: {
+                type: Number,
+                value: 2000
+            },
+            open: {
+                type: Boolean,
+                value: false
+            },
+            items: {
+                type: Array,
+                value: []
+            },
+            spirals: {
+                type: Number,
+                value: 2
+            },
+            radius: {
+                type: Number,
+                value: 250
+            },
+            size: {
+                type: Number,
+                computed: '_calculateSize(radius)'
+            }
         };
+    }
+
+    static get observers() {
+        return [
+            '_buildMenu(items, spirals, radius)'
+        ];
     }
 
     ready() {
         super.ready();
+    }
 
-        let svg = d3.select(this.$.svg);
+    _calculateSize(radius) {
+        return radius*2;
+    }
 
-        let size = 500;
+    _buildMenu(items, noOfSpirals, radiusOfMenu) {
+        var self = this;
+
+        let r = radiusOfMenu; //size / 2;
+        let size = r*2;//500;
         let start=0, end=2.25;
-        let r = size / 2;
+
+        let width = size;
+        let height = size;
+
+        let svg = d3.select(this.$.container)
+            .append('svg').attr('width', width).attr('height', height);
+
+
         let marginSize = size / 30;
         let radius = d3.scaleLinear()
             .domain([start, end])
             .range([marginSize, r]);
-        let spirals = 2;
+        let spirals = noOfSpirals;
         let points = d3.range(start, end + 0.001, (end - start) / 1000);
 
         let g = svg.append('g').attr("transform", "translate(" + (size/2) + "," + (size/2)  + ")");
@@ -133,49 +185,92 @@ class TmSpiralMenu extends PolymerElement {
 
 
         let interpolator = d3.interpolate(0, path.node().getTotalLength()); //Set up interpolation from 0 to the path length
-        let items = [
-            {name: 'A', color: 'teal'},
-            {name: 'B', color: 'cyan'},
-            {name: 'C', color: 'purple'},
-            {name: 'A', color: 'orange'},
-            {name: 'B', color: 'green'},
-            {name: 'C', color: 'blue'}
-        ];
+        // let items = [
+        //     {name: 'A', color: 'teal'},
+        //     {name: 'B', color: 'cyan'},
+        //     {name: 'C', color: 'purple'},
+        //     {name: 'A', color: 'orange'},
+        //     {name: 'B', color: 'green'},
+        //     {name: 'C', color: 'blue'},
+        //     {name: 'C', color: 'yellow'},
+        //     {name: 'A', color: 'teal'},
+        //     // {name: 'B', color: 'cyan'},
+        //     // {name: 'C', color: 'purple'},
+        //     // {name: 'A', color: 'orange'},
+        //     // {name: 'B', color: 'green'},
+        //     // {name: 'C', color: 'blue'},
+        //     // {name: 'C', color: 'yellow'},
+        //     // {name: 'A', color: 'teal'},
+        //     // {name: 'B', color: 'cyan'},
+        //     // {name: 'C', color: 'purple'},
+        //     // {name: 'A', color: 'orange'},
+        //     // {name: 'B', color: 'green'},
+        //     // {name: 'C', color: 'blue'},
+        //     // {name: 'C', color: 'yellow'},
+        //     // {name: 'A', color: 'teal'},
+        //     // {name: 'B', color: 'cyan'},
+        //     // {name: 'C', color: 'purple'},
+        //     // {name: 'A', color: 'orange'},
+        //     // {name: 'B', color: 'green'},
+        //     // {name: 'C', color: 'blue'},
+        //     // {name: 'C', color: 'yellow'},
+        //     // {name: 'A', color: 'teal'},
+        //     // {name: 'B', color: 'cyan'},
+        //     // {name: 'C', color: 'purple'},
+        //     // {name: 'A', color: 'orange'},
+        //     // {name: 'B', color: 'green'},
+        //     // {name: 'C', color: 'blue'},
+        //     // {name: 'C', color: 'yellow'},
+        //     // {name: 'A', color: 'teal'},
+        //     // {name: 'B', color: 'cyan'},
+        //     // {name: 'C', color: 'purple'},
+        //     // {name: 'A', color: 'orange'},
+        //     // {name: 'B', color: 'green'},
+        //     // {name: 'C', color: 'blue'},
+        //     // {name: 'C', color: 'yellow'},
+        // ];
+
+        // let items = data;
+
+        let spiralLength = path.node().getTotalLength();
+        let numberOfItems = items.length;
+        let itemRadius = radiusOfMenu / numberOfItems;
+        let calculatedRadius = r*0.68; //170;
+        let circumference = 2*3.14159*calculatedRadius;
+        let itemSeparation = circumference / numberOfItems;
+        let seperationRatio = itemSeparation / spiralLength;
+
+        // reduces how far an item travels along the spiral path
+        let distanceAdjRatio = seperationRatio; //0.105;
 
 
         let circles = g.selectAll('circle.items').data(items).enter()
             .append('circle')
             .attr('cx', 0)
             .attr('cy', 0)
-            .attr('r', 50)
+            .attr('r', itemRadius)
             .attr('class', 'items')
             .attr('fill', function(d) { return d.color });
-
-        let spiralLength = path.node().getTotalLength();
-        let numberOfItems = items.length;
-
-        let open = 0;
-        this.animating = false;
 
         g.append('circle')
             .attr('cx', 0)
             .attr('cy', 0)
-            .attr('r', 50)
+            .attr('r', radiusOfMenu/6)
             .attr('fill', "red")
             .on('click', function() {
-                if (animating) return;
-                this.animating = true;
+                if (self.animating > 0) return;
 
-                if (open === 0) {
+                if (!self.open) {
                     g.selectAll('circle.items').transition()
                         .delay(function(d,i) {return 50*(i+1)})
-                        .duration(5000)
+                        .duration(function(d,i) {return self.duration + (50 * (numberOfItems-i-1))})
                         .ease(d3.easeLinear)
                         .tween("pathTween", (d,i,circles) => {
+                            self.animating++;
                             //let circle = d3.select(this);
                             console.log('---A : ', d, i, circles[i]);
                             return function(t){
-                                let distanceALongLing = interpolator(t)*(1-(0.105*i));
+                                let distanceALongLing = interpolator(t)*(1-(distanceAdjRatio*i));
                                 console.log('INTER: ', distanceALongLing);
                                 let point = path.node().getPointAtLength(distanceALongLing); // Get the next point along the path
                                 // Select the circle
@@ -183,30 +278,44 @@ class TmSpiralMenu extends PolymerElement {
 
                                 d3.select(circles[i]).attr("cx", point.x) // Set the cx
                                     .attr("cy", point.y) // Set the cy
+                            }
+                        }).on("end", (d,i,circles) => {
+
+                            self.animating--;
+                            if (self.animating === 0) {
+                                self.open = true;
                             }
                         });
                 } else {
                     g.selectAll('circle.items').transition()
-                        .delay(function(d,i) {return 50*(numberOfItems-(i+1))})
-                        .duration(5000)
+                        .delay(function(d,i) {return i*50})
+                        .duration(self.duration)
                         .ease(d3.easeLinear)
                         .tween("pathTween", (d,i,circles) => {
-                            //let circle = d3.select(this);
-                            console.log('---A : ', d, i, circles[i]);
+                            self.animating++;
+                            let circle = circles[i];
+
+                            console.log('---A : ', d, i, circle);
                             return function(t){
-                                let distanceALongLing = spiralLength - interpolator(t);
+                                let distanceALongLing = spiralLength*(1-(distanceAdjRatio*i)) - interpolator(t);
                                 console.log('INTER: ', distanceALongLing);
                                 let point = path.node().getPointAtLength(distanceALongLing); // Get the next point along the path
                                 // Select the circle
                                 //let circle = d3.select(self);
 
+                                console.log('CIRCLE: ', d.color, point);
                                 d3.select(circles[i]).attr("cx", point.x) // Set the cx
                                     .attr("cy", point.y) // Set the cy
                             }
+                        }).on("end", (d,i,circles) => {
+                            //d3.select(circles[i]).attr("cx", 0).attr("cy", 0);
+                            self.animating--;
+                            if (self.animating === 0) {
+                                self.open = false;
+                            }
                         });
                 }
-                open = 1 - open;
-                this.animating = false;
+
             });
 
 
