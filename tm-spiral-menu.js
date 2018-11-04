@@ -88,7 +88,10 @@ class TmSpiralMenu extends PolymerElement {
     }
 
     _buildMenu(items, noOfSpirals, radiusOfMenu) {
-        var self = this;
+        let self = this;
+        this.open = false;
+
+        d3.select(this.$.container).select('*').remove();
 
         let r = radiusOfMenu; //size / 2;
         let size = r*2;//500;
@@ -154,11 +157,14 @@ class TmSpiralMenu extends PolymerElement {
             .attr('class', 'items')
             .attr('fill', function(d) { return d.color });
 
+        let menuButtonSize = (radiusOfMenu/6 < itemRadius*1.5 ? itemRadius*1.5 : radiusOfMenu/6);
+
+
         g.append('circle')
             .attr('cx', 0)
             .attr('cy', 0)
-            .attr('r', radiusOfMenu/6)
-            .attr('fill', "red")
+            .attr('r', menuButtonSize)
+            .attr('fill', "teal")
             .on('click', function() {
                 if (self.animating > 0) return;
 
