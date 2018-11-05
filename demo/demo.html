@@ -31,7 +31,7 @@
                             border: solid lightgray 1px;
                         }
                     </style>
-                    <tm-spiral-menu items="[[items]]" spirals="2" radius="350" duration="1000"></tm-spiral-menu>
+                    <tm-spiral-menu items="[[items]]" spirals="3" radius="350" duration="1000"></tm-spiral-menu>
                 `;
             }
 
@@ -40,19 +40,19 @@
                     data: {
                         type: Array,
                         value: [
-                            {name: 'A', color: 'green'},
-                            {name: 'B', color: 'cyan'},
-                            {name: 'C', color: 'purple'},
-                            {name: 'A', color: 'orange'},
-                            {name: 'B', color: 'green'},
-                            {name: 'C', color: 'blue'},
-                            {name: 'C', color: 'yellow'},
-                            {name: 'A', color: 'orange'}
+                            {name: 'A', color: 'green', title: 'short'},
+                            {name: 'B', color: 'cyan', title: 'not that short'},
+                            {name: 'C', color: 'purple', title: 'not short at all by any means'},
+                            {name: 'A', color: 'orange', title: 'considered to be a long title, but only with this extra bit'},
+                            {name: 'B', color: 'green', title: 'title that was added to.... efdsfd dsfd fdfd fds f sad fsda f sd f sdf dsa fd fds df dfsa df fsd fd fd fd dsaf fd... by a cat'},
+                            {name: 'C', color: 'blue', title: 'short'},
+                            {name: 'C', color: 'yellow', title: 'short'},
+                            {name: 'A', color: 'orange', title: 'short'}
                         ]
                     },
                     number: {
                         type: Number,
-                        value: 6
+                        value: 8
                     },
                     items: {
                         type: Array,

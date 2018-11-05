@@ -38,18 +38,7 @@ class TmSpiralMenu extends PolymerElement {
                 box-sizing: border-box;
             }
         </style>
-        <!--<svg width="500" height="500"> -->
-            <!--<text x="100" y="200" ><tspan x="0" y="200" dy="1em">purple</tspan><tspan x="100" y="200" dy="2.1em">sfasdf</tspan><tspan x="0" y="200" dy="3.2em">fdsa</tspan><tspan x="0" y="200" dy="4.300000000000001em">sfasdf</tspan><tspan x="0" y="200" dy="5.4em">sdf sdf</tspan><tspan x="0" y="200" dy="6.5em">sd</tspan></text>-->
-            <!--<text x="100" y="100" fill="red">I love SVG!</text>-->
-            <!--<text>-->
-                <!--<tspan x="100" y="10" dy="1em">purple</tspan>-->
-                <!--<tspan x="100" y="30" dy="1em">purple</tspan>-->
-                <!--<tspan x="100" y="50" dy="1em">purple</tspan>-->
-                <!--<tspan x="100" y="70" dy="1em">purple</tspan>-->
-                <!--<tspan x="100" y="90" dy="1em">purple</tspan>-->
-            <!--</text>-->
-            <!---->
-        <!--</svg>-->
+
             
         <div id="container">
         
@@ -151,7 +140,7 @@ class TmSpiralMenu extends PolymerElement {
             .attr("id", "spiral")
             .attr("d", spiral)
             .style("fill", "none")
-            .style("stroke", "none");
+            .style("stroke", "lightblue");
 
         let interpolator = d3.interpolate(0, path.node().getTotalLength()); //Set up interpolation from 0 to the path length
 
@@ -177,24 +166,24 @@ class TmSpiralMenu extends PolymerElement {
                 .attr('cy', 0)
                 .attr('r', itemRadius)
                 .attr('class', 'items')
-                .attr('fill', function(d) { return 'teal' });
+                .attr('fill', 'teal');
                 //.attr('fill', function(d) { return d.color });
 
         circles.append('text')
                 .attr('class', 'items')
                 .attr('font-family', 'sans-serif')
-                .attr('font-size', '12px')
+                .attr('font-size', itemRadius/5 + "px")
                 .attr('fill', 'white')
-                .text((d) => {return d.color + " sfasdffdsa sfasdf sdf sdf sd"})
-                .attr('x', (d,i) => {return -40})
-                .attr('y', (d,i) => {return -25})
-                .call(wrap, 80);
+                .text((d) => {return (d.title ? d.title : d.color)})
+                // .attr('x', (d,i) => {return -40})
+                // .attr('y', (d,i) => {return -40})
+                .attr('x', -1 * itemRadius)
+                .attr('y', -1 * itemRadius)
+                .call(wrap, itemRadius*2, itemRadius*2);
 
-
-
-        function wrap(text, width) {
+        function wrap(text, width, height) {
             text.each(function() {
-                var text = d3.select(this),
+                let text = d3.select(this),
                     words = text.text().split(/\s+/).reverse(),
                     word,
                     line = [],
@@ -203,30 +192,52 @@ class TmSpiralMenu extends PolymerElement {
                     x = text.attr("x"),
                     y = text.attr("y"),
                     dy = 1,
+                    lines = 0,
                     tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+
+
+
                 while (word = words.pop()) {
                     line.push(word);
                     tspan.text(line.join(" "));
-                    if (tspan.node().getComputedTextLength() > width) {
+
+                    let currentY = lineNumber*lineHeight;
+                    //let widthAtY = 2 * Math.sqrt(size*size - ((size-currentY) * (size-currentY)));
+                    let widthAtY = Math.sqrt(size*size - ((size-currentY) * (size-currentY)));
+
+                    if (tspan.node().getComputedTextLength() > widthAtY) {
                         line.pop();
                         tspan.text(line.join(" "));
                         line = [word];
+                        lines++;
+
+
+
                         let lineWidth = tspan.node().getComputedTextLength();
                         let dx = (width - lineWidth) / 2;
+
+
+
+
+
                         tspan.attr("dx", dx + "px");
                         tspan = text.append("tspan")
                             .attr("x", x)
                             .attr("y", y)
                             .attr("dy", ++lineNumber * lineHeight + dy + "em")
                             .text(word);
-
-
                     }
                 }
                 let lineWidth = tspan.node().getComputedTextLength();
                 let dx = (width - lineWidth) / 2;
                 tspan.attr("dx", dx + "px");
 
+                // let textHeight = lineHeight * lines;
+                // let textTop = (height-textHeight) / 2 - 20;
+                // text.attr("y", textTop);
+
+                // text.select('tspan')
+                //         .attr('dy', (d,i) => {return (textTop + 10*i) + "em"});
             });
         }
 
@@ -267,13 +278,23 @@ class TmSpiralMenu extends PolymerElement {
             .attr('fill', "teal")
             .on('click', menu);
 
-        g.append('text').text('MENU')
+        let menuFontSize = (menuButtonSize / 2);
+
+
+        let menuText = g.append('text').text('MENU')
+            .attr('class', 'menu')
             .attr('font-family', 'sans-serif')
-            .attr('font-size', '40px')
-            .attr('x', "-58px")
-            .attr('y', '15px')
-            .attr('fill', 'white')
-            .on('click', menu);
+            .attr('font-size', menuFontSize + "px")
+            .attr('x', 0)
+            .attr('y', (menuFontSize/4) + "px")
+            .attr('fill', 'white');
+
+        menuText.on('click', menu);
+
+        let menuTextLength = menuText.node().getComputedTextLength();
+        menuText.attr('x', -1 * (menuTextLength/2));
+
+        menu();
 
         function menu() {
             if (self.animating > 0) return;
@@ -285,27 +306,17 @@ class TmSpiralMenu extends PolymerElement {
                     .ease(d3.easeLinear)
                     .tween("pathTween", (d,i,circles) => {
                         self.animating++;
-                        //let circle = d3.select(this);
                         return function(t){
                             let distanceALongLing = interpolator(t)*(1-(distanceAdjRatio*i));
-                            let point = path.node().getPointAtLength(distanceALongLing); // Get the next point along the path
-                            // Select the circle
-                            //let circle = d3.select(self);
-
+                            let point = path.node().getPointAtLength(distanceALongLing);
                             d3.select(circles[i]).attr("transform", "translate(" + point.x + "," + point.y +   ")");
-
-
-                            d3.select(circles[i])
-                                .attr("cx", point.x)
-                                .attr("cy", point.y)
                         }
-                    }).on("end", (d,i,circles) => {
-
-                    self.animating--;
-                    if (self.animating === 0) {
-                        self.open = true;
-                    }
-                });
+                    }).on("end", () => {
+                        self.animating--;
+                        if (self.animating === 0) {
+                            self.open = true;
+                        }
+                    });
             } else {
                 g.selectAll('g.items').transition()
                     .delay(function(d,i) {return i*50})
@@ -313,26 +324,17 @@ class TmSpiralMenu extends PolymerElement {
                     .ease(d3.easeLinear)
                     .tween("pathTween", (d,i,circles) => {
                         self.animating++;
-                        let circle = circles[i];
-
                         return function(t){
                             let distanceALongLing = spiralLength*(1-(distanceAdjRatio*i)) - interpolator(t);
                             let point = path.node().getPointAtLength(distanceALongLing); // Get the next point along the path
-                            // Select the circle
-                            //let circle = d3.select(self);
-
                             d3.select(circles[i]).attr("transform", "translate(" + point.x + "," + point.y +   ")")
-
-                            // d3.select(circles[i]).attr("cx", point.x) // Set the cx
-                            //     .attr("cy", point.y) // Set the cy
                         }
-                    }).on("end", (d,i,circles) => {
-                    //d3.select(circles[i]).attr("cx", 0).attr("cy", 0);
-                    self.animating--;
-                    if (self.animating === 0) {
-                        self.open = false;
-                    }
-                });
+                    }).on("end", () => {
+                        self.animating--;
+                        if (self.animating === 0) {
+                            self.open = false;
+                        }
+                    });
             }
 
         }
