@@ -15,12 +15,25 @@
   ],
   "extraDependencies": [
     "manifest.json",
-    "node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"
+    "node_modules/@webcomponents/webcomponentsjs/**"
   ],
   "moduleResolution": "node",
   "npm": true,
   "builds": [
-    {"name": "prod", "preset": "es6-unbundled"},
+    {
+      "name": "prod",
+      "addServiceWorker": true,
+      "js": {"minify": true, "compile": true},
+      "css": {"minify": true},
+      "html": {"minify": true},
+      "addPushManifest": true,
+      "bundle": {
+        "excludes": [],
+        "stripComments": true,
+        "inlineCss": false,
+        "sourcemaps": true
+      }
+    },
     {
       "name": "dev",
       "addServiceWorker": false,
