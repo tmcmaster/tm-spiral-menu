@@ -20,7 +20,7 @@ const d3 = {
     interpolate: d3interpolate,
     transition: d3transition,
     easeLinear: d3easeLinear
-}
+};
 
 /**
  * `tm-spiral-menu`
@@ -58,14 +58,10 @@ class TmSpiralMenu extends PolymerElement {
                 box-sizing: border-box;
             }
         </style>
-
-            
+    
         <div id="container">
         
         </div>
-        
-       
-      
     `;
     }
 
@@ -181,7 +177,6 @@ class TmSpiralMenu extends PolymerElement {
             .attr('x', 0)
             .attr('y', 0);
 
-
         circles.append('circle').attr('cx', 0)
                 .attr('cy', 0)
                 .attr('r', itemRadius)
@@ -235,10 +230,6 @@ class TmSpiralMenu extends PolymerElement {
 
                         let lineWidth = tspan.node().getComputedTextLength();
                         let dx = (width - lineWidth) / 2;
-
-
-
-
 
                         tspan.attr("dx", dx + "px");
                         tspan = text.append("tspan")

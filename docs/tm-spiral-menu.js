@@ -16,16 +16,15 @@ const d3 = {
   interpolate: d3interpolate,
   transition: d3transition,
   easeLinear: d3easeLinear
-  /**
-   * `tm-spiral-menu`
-   * Polymer spiral menu web component
-   *
-   * @customElement
-   * @polymer
-   * @demo demo/index.html
-   */
-
 };
+/**
+ * `tm-spiral-menu`
+ * Polymer spiral menu web component
+ *
+ * @customElement
+ * @polymer
+ * @demo demo/index.html
+ */
 
 class TmSpiralMenu extends PolymerElement {
   static get template() {
@@ -55,14 +54,10 @@ class TmSpiralMenu extends PolymerElement {
                 box-sizing: border-box;
             }
         </style>
-
-            
+    
         <div id="container">
         
         </div>
-        
-       
-      
     `;
   }
 
