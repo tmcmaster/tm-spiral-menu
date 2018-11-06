@@ -11,6 +11,9 @@
     <script type="module">
     </script>
 
+    <style>
+    </style>
+
     <script type="module" src="tm-spiral-menu.js"></script>
     <script type="module">
         import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
@@ -28,7 +31,7 @@
 
                         tm-spiral-menu {
                             box-sizing: border-box;
-                            border: solid lightgray 1px;
+                            //border: solid lightgray 1px;
                         }
                     </style>
                     <tm-spiral-menu items="[[items]]" spirals="3" radius="300" duration="2000"></tm-spiral-menu>
@@ -71,6 +74,8 @@
 
             ready() {
                 super.ready();
+
+                console.log()
             }
         }
 
@@ -78,6 +83,6 @@
     </script>
 </head>
 <body>
-<demo-tm-spiral-menu></demo-tm-spiral-menu>
+    <demo-tm-spiral-menu></demo-tm-spiral-menu>
 </body>
 </html>

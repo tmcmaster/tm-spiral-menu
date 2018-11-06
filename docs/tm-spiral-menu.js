@@ -47,6 +47,7 @@ class TmSpiralMenu extends PolymerElement {
                 display: inline-block;
                 box-sizing: border-box;
                 border: solid teal 2px;
+                border-radius: 100%;
             }
             
             text.items {
@@ -251,7 +252,7 @@ class TmSpiralMenu extends PolymerElement {
         g.selectAll('g.items').transition().delay(function (d, i) {
           return 50 * (i + 1);
         }).duration(function (d, i) {
-          return self.duration + 50 * (i + 1);
+          return self.duration + 50 * (numberOfItems - i - 1);
         }).ease(d3.easeLinear).tween("pathTween", (d, i, circles) => {
           self.animating++;
           return function (t) {
