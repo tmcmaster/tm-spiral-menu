@@ -1,6 +1,26 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 
-import * as d3 from "d3v4";
+//import * as d3 from "d3v4";
+
+import {select as d3select} from "d3-selection";
+import {scaleLinear as d3scaleLinear} from "d3-scale";
+import {range as d3range} from "d3-array";
+import {radialLine as d3radialLine, curveCardinal as d3curveCardinal} from "d3-shape";
+import {interpolate as d3interpolate} from "d3-interpolate";
+import {transition as d3transition} from "d3-transition";
+import {easeLinear as d3easeLinear} from "d3-ease";
+
+
+const d3 = {
+    select: d3select,
+    scaleLinear: d3scaleLinear,
+    range: d3range,
+    radialLine: d3radialLine,
+    curveCardinal: d3curveCardinal,
+    interpolate: d3interpolate,
+    transition: d3transition,
+    easeLinear: d3easeLinear
+}
 
 /**
  * `tm-spiral-menu`
@@ -140,7 +160,7 @@ class TmSpiralMenu extends PolymerElement {
             .attr("id", "spiral")
             .attr("d", spiral)
             .style("fill", "none")
-            .style("stroke", "lightblue");
+            .style("stroke", "none");
 
         let interpolator = d3.interpolate(0, path.node().getTotalLength()); //Set up interpolation from 0 to the path length
 
@@ -273,7 +293,7 @@ class TmSpiralMenu extends PolymerElement {
 
         g.append('circle')
             .attr('cx', 0)
-            .attr('cy', 0)
+            .attr('cy', -10)
             .attr('r', menuButtonSize)
             .attr('fill', "teal")
             .on('click', menu);
@@ -286,7 +306,7 @@ class TmSpiralMenu extends PolymerElement {
             .attr('font-family', 'sans-serif')
             .attr('font-size', menuFontSize + "px")
             .attr('x', 0)
-            .attr('y', (menuFontSize/4) + "px")
+            .attr('y', (menuFontSize/4)-8 + "px")
             .attr('fill', 'white');
 
         menuText.on('click', menu);
@@ -294,7 +314,7 @@ class TmSpiralMenu extends PolymerElement {
         let menuTextLength = menuText.node().getComputedTextLength();
         menuText.attr('x', -1 * (menuTextLength/2));
 
-        menu();
+        //menu();
 
         function menu() {
             if (self.animating > 0) return;
@@ -309,7 +329,7 @@ class TmSpiralMenu extends PolymerElement {
                         return function(t){
                             let distanceALongLing = interpolator(t)*(1-(distanceAdjRatio*i));
                             let point = path.node().getPointAtLength(distanceALongLing);
-                            d3.select(circles[i]).attr("transform", "translate(" + point.x + "," + point.y +   ")");
+                            d3select(circles[i]).attr("transform", "translate(" + point.x + "," + point.y +   ")");
                         }
                     }).on("end", () => {
                         self.animating--;
@@ -319,14 +339,14 @@ class TmSpiralMenu extends PolymerElement {
                     });
             } else {
                 g.selectAll('g.items').transition()
-                    .delay(function(d,i) {return i*50})
-                    .duration(self.duration)
+                    .delay(function(d,i) {return (50 * (i+1))})
+                    .duration(function(d,i) {return self.duration + (50 * (i+1))})
                     .ease(d3.easeLinear)
                     .tween("pathTween", (d,i,circles) => {
                         self.animating++;
                         return function(t){
                             let distanceALongLing = spiralLength*(1-(distanceAdjRatio*i)) - interpolator(t);
-                            let point = path.node().getPointAtLength(distanceALongLing); // Get the next point along the path
+                            let point = path.node().getPointAtLength(distanceALongLing);
                             d3.select(circles[i]).attr("transform", "translate(" + point.x + "," + point.y +   ")")
                         }
                     }).on("end", () => {
