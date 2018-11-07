@@ -3,6 +3,7 @@
   "description": "Polymer spiral menu web component",
   "main": "tm-spiral-menu.js",
   "dependencies": {
+    "@polymer/paper-input": "^3.0.1",
     "@polymer/polymer": "^3.1.0",
     "d3v4": "^4.2.2"
   },

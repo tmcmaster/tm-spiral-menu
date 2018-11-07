@@ -1,0 +1,83 @@
+{
+  "lint": {
+    "rules": [
+      "polymer-3"
+    ]
+  },
+  "root": "./",
+  "entrypoint": "index.html",
+  "shell": "tm-spiral-menu.js",
+  "fragments": [],
+  "sources": [
+    "tm-spiral-menu.js",
+    "manifest/**",
+    "package.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "node_modules/@webcomponents/webcomponentsjs/*.js"
+  ],
+  "moduleResolution": "node",
+  "npm": true,
+  "builds": [
+    {
+      "name": "es6cb",
+      "addServiceWorker": true,
+      "js": {"minify": true, "compile": true},
+      "css": {"minify": true},
+      "html": {"minify": true},
+      "addPushManifest": false,
+      "bundle": true
+    },
+    {
+      "name": "es6c",
+      "addServiceWorker": true,
+      "js": {"minify": true, "compile": true},
+      "css": {"minify": true},
+      "html": {"minify": true},
+      "addPushManifest": false,
+      "bundle": false
+    },
+    {
+      "name": "es6b",
+      "addServiceWorker": true,
+      "js": {"minify": true, "compile": false},
+      "css": {"minify": true},
+      "html": {"minify": true},
+      "addPushManifest": false,
+      "bundle": true
+    },
+    {
+      "name": "prod",
+      "addServiceWorker": true,
+      "js": {"minify": true, "compile": false},
+      "css": {"minify": true},
+      "html": {"minify": true},
+      "addPushManifest": false,
+      "bundle": false
+    },
+    {
+      "name": "prod-bundled",
+      "addServiceWorker": true,
+      "js": {"minify": true, "compile": false},
+      "css": {"minify": true},
+      "html": {"minify": true},
+      "addPushManifest": true,
+      "bundle": {
+        "excludes": [],
+        "stripComments": true,
+        "inlineCss": false,
+        "sourcemaps": true
+      }
+    },
+    {
+      "name": "dev",
+      "addServiceWorker": false,
+      "js": {"minify": false, "compile": false},
+      "css": {"minify": false},
+      "html": {"minify": false},
+      "bundle": false,
+      "addPushManifest": false
+    }
+  ]
+}

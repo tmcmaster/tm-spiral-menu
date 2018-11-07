@@ -3,45 +3,5 @@
     "rules": [
       "polymer-3"
     ]
-  },
-  "root": "./",
-  "entrypoint": "index.html",
-  "shell": "tm-spiral-menu.js",
-  "fragments": [],
-  "sources": [
-    "tm-spiral-menu.js",
-    "manifest/**",
-    "package.json"
-  ],
-  "extraDependencies": [
-    "manifest.json",
-    "node_modules/@webcomponents/webcomponentsjs/**"
-  ],
-  "moduleResolution": "node",
-  "npm": true,
-  "builds": [
-    {
-      "name": "prod",
-      "addServiceWorker": true,
-      "js": {"minify": true, "compile": true},
-      "css": {"minify": true},
-      "html": {"minify": true},
-      "addPushManifest": true,
-      "bundle": {
-        "excludes": [],
-        "stripComments": true,
-        "inlineCss": false,
-        "sourcemaps": true
-      }
-    },
-    {
-      "name": "dev",
-      "addServiceWorker": false,
-      "js": {"minify": false, "compile": false},
-      "css": {"minify": false},
-      "html": {"minify": false},
-      "bundle": false,
-      "addPushManifest": false
-    }
-  ]
+  }
 }

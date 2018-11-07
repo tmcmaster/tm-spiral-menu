@@ -13,6 +13,7 @@
 
     <script type="module" src="tm-spiral-menu.js"></script>
     <script type="module">import { html, PolymerElement } from "./node_modules/@polymer/polymer/polymer-element.js";
+import "./node_modules/@polymer/paper-input/paper-input.js";
 
 class DemoTmSpiralMenu extends PolymerElement {
   static get template() {
@@ -29,8 +30,36 @@ class DemoTmSpiralMenu extends PolymerElement {
                             box-sizing: border-box;
                             //border: solid lightgray 1px;
                         }
+                        div.controls {
+                            display: inline-block;
+                            width: 200px;
+                            padding: 10px;
+                        }
+                        div.element {
+                            display: inline-block;
+                        }
+                        div.page {
+                            display: flex;
+                        }
+
+                        paper-input {
+                            width: 150px;
+                        }
                     </style>
-                    <tm-spiral-menu items="[[items]]" spirals="3" radius="300" duration="2000"></tm-spiral-menu>
+                    <div class="page">
+                        <div class="controls">
+                            <h2>Controls</h2>
+                            <paper-input always-float-label label="Number of menu items" value="{{settings.number}}" type="number"></paper-input>
+                            <paper-input always-float-label label="Number of spirals" value="{{settings.spirals}}" type="number"></paper-input>
+                            <paper-input always-float-label label="Menu Radius (px)" value="{{settings.radius}}" type="number"></paper-input>
+                            <paper-input always-float-label label="Transition (seconds)" value="{{settings.duration}}" type="number"></paper-input>
+                        </div>
+                        <div class="element">
+                            <!--<tm-spiral-menu items="[[items]]"></tm-spiral-menu>-->
+                            <tm-spiral-menu id="spiral" items="[[items]]" spirals="[[spirals]]" radius="[[radius]]" duration="[[duration]]"></tm-spiral-menu>
+                        </div>
+
+                    </div>
                 `;
   }
 
@@ -72,15 +101,45 @@ class DemoTmSpiralMenu extends PolymerElement {
           title: 'short'
         }]
       },
-      number: {
-        type: Number,
-        value: 8
+      settings: {
+        type: Object,
+        observer: '_settingsChanged',
+        value: {
+          radius: 300,
+          spirals: 3,
+          number: 8,
+          duration: 2
+        }
       },
       items: {
         type: Array,
         computed: '_generateItems(data, number)'
+      },
+      number: {
+        type: Number,
+        computed: '_parseInteger(settings.number)'
+      },
+      spirals: {
+        type: Number,
+        computed: '_parseInteger(settings.spirals)'
+      },
+      radius: {
+        type: Number,
+        computed: '_parseInteger(settings.radius)'
+      },
+      duration: {
+        type: Number,
+        computed: '_convertT0Milly(settings.duration)'
       }
     };
+  }
+
+  _parseInteger(value) {
+    return parseInt(value);
+  }
+
+  _convertT0Milly(value) {
+    return parseInt(value) * 1000;
   }
 
   _generateItems(data, number) {

@@ -70,7 +70,7 @@ class TmSpiralMenu extends PolymerElement {
       },
       duration: {
         type: Number,
-        value: 1000
+        value: 1
       },
       open: {
         type: Boolean,
@@ -96,18 +96,30 @@ class TmSpiralMenu extends PolymerElement {
   }
 
   static get observers() {
-    return ['_buildMenu(items, spirals, radius)'];
+    return ['_menuRequiresRebuild(items, spirals, radius, duration)'];
   }
 
   ready() {
     super.ready();
   }
 
+  _menuRequiresRebuild(items, spirals, radius, duration) {
+    this.rebuild();
+  }
+
+  rebuild() {
+    this._buildMenu(this.items, this.spirals, this.radius, this.duration);
+  }
+
   _calculateSize(radius) {
     return radius * 2;
   }
 
-  _buildMenu(items, noOfSpirals, radiusOfMenu) {
+  _buildMenu(items, noOfSpirals, radiusOfMenu, duration) {
+    if (items === undefined || noOfSpirals === undefined || radiusOfMenu === undefined || duration === undefined || duration <= 0 || radiusOfMenu < 200 || noOfSpirals < 2 || items.length < 1) {
+      return;
+    }
+
     let self = this;
     this.open = false;
     d3.select(this.$.container).select('*').remove();
@@ -233,7 +245,7 @@ class TmSpiralMenu extends PolymerElement {
         g.selectAll('g.items').transition().delay(function (d, i) {
           return 50 * (i + 1);
         }).duration(function (d, i) {
-          return self.duration + 50 * (numberOfItems - i - 1);
+          return duration + 50 * (numberOfItems - i - 1);
         }).ease(d3.easeLinear).tween("pathTween", (d, i, circles) => {
           self.animating++;
           return function (t) {
@@ -252,7 +264,7 @@ class TmSpiralMenu extends PolymerElement {
         g.selectAll('g.items').transition().delay(function (d, i) {
           return 50 * (i + 1);
         }).duration(function (d, i) {
-          return self.duration + 50 * (numberOfItems - i - 1);
+          return duration + 50 * (numberOfItems - i - 1);
         }).ease(d3.easeLinear).tween("pathTween", (d, i, circles) => {
           self.animating++;
           return function (t) {
